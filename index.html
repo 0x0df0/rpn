@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, height-device-height, initial-scale=1, user-scalable=0">
+    
+  <head>
+    <title>
+      RPN Calculator
+    </title>
+
+    <style type="text/css">
+      html, body {
+        background-color: #000000; 
+        overflow: none
+        }
+      table.t1 {
+        width: 100%; 
+        height: 80vh; 
+        background-color: #000000; 
+        border-style: solid; 
+        border-width: 1px; 
+        border-color: #000000; 
+        padding: 3px; 
+        border-collapse: collapse; 
+        table-layout: fixed;
+        }
+      td {
+        border-style: solid; 
+        border-width: 1px; 
+        border-color: #000000; 
+        padding: 3px;
+        vertical-align: center;
+        }
+      td.display {
+        width: 100%; 
+        background-color: #FFFFFF; 
+        word-wrap: break-word;
+        }
+      td.portrait_button {
+        width: 25%; 
+        height: 12%; 
+        }
+      td.landscape_button {
+        width: 14%; 
+        height: 20%; 
+        }
+      td.digit_button           {background-color: #FFFFFF;}
+      td.digit_button:active    {background-color: #808080;}
+      td.function_button        {background-color: #F0F0F0;}
+      td.function_button:active {background-color: #787878;}
+      td.f_button               {background-color: #98F442;}
+      td.f_button:active        {background-color: #4C7A21;}
+      p {
+        margin: 0px; 
+      }
+      p.display {
+        text-align: right; 
+        color: #000000;
+      }
+      p.portrait_display {font: 6.2vh Arial;}
+      p.landscape_display {font: 11vh Arial;}
+      p.button {
+        text-align: center; 
+        color: #000000;
+      }
+      p.portrait_button {font: 3.7vh Arial;}
+      p.landscape_button {font: 6.7vh Arial;}
+      p.f_button {
+        text-align: center; 
+        color: #000000;
+      }
+      p.portrait_f_button {font: 3.7vh Arial;}
+      p.landscape_f_button {font: 6.7vh Arial;}
+
+      @media screen and (orientation: portrait)  {div.landscape {display: none;}}
+      @media screen and (orientation: landscape) {div.portrait {display: none;}}
+    </style>
+
+  </head>
+
+  <body>
+    <div class="portrait">
+      <table cellspacing="0" cellpadding="0" class="t1">
+        <tbody>
+          <tr>
+            <td colspan="4" class="display" onclick="click_display()">
+              <p id="portrait_display" class="display portrait_display"></p>
+            </td>
+          </tr>
+          <tr>
+            <td class="portrait_button f_button" onclick="click_f()">
+              <p class="f_button portrait_f_button">f</p>
+            </td>
+            <td class="portrait_button function_button" onclick="click_pi()">
+              <p id="portrait_pi" class="button portrait_button">pi</p>
+              <p id="portrait_sin" class="button portrait_button" style="display: none">sin</p>
+            </td>
+            <td class="portrait_button function_button" onclick="click_ex()">
+              <p id="portrait_ex" class="button portrait_button"><i>e<sup>x</sup></i></p>
+              <p id="portrait_cos" class="button portrait_button" style="display: none">cos</p>
+            </td>
+            <td class="portrait_button function_button" onclick="click_power()">
+              <p id="portrait_power" class="button portrait_button"><i>y<sup>x</sup></i></p>
+              <p id="portrait_tan" class="button portrait_button" style="display: none">tan</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="portrait_button function_button" onclick="click_swap()">
+              <p class="button portrait_button"><i>x</i><><i>y</i></p>
+            </td>
+            <td class="portrait_button function_button" onclick="click_factorial()">
+              <p id="portrait_factorial" class="button portrait_button"><i>x</i>!</p>
+              <p id="portrait_arcsin" class="button portrait_button" style="display: none">sin<sup>-1</sup></p>
+            </td>
+            <td class="portrait_button function_button" onclick="click_ln()">
+              <p id="portrait_ln" class="button portrait_button">ln</p>
+              <p id="portrait_arccos" class="button portrait_button" style="display: none">cos<sup>-1</sup></p>
+            </td>
+            <td class="portrait_button function_button" onclick="click_inverse()">
+              <p id="portrait_inverse" class="button portrait_button">1/<i>x</i></p>
+              <p id="portrait_arctan" class="button portrait_button" style="display: none">tan<sup>-1</sup></p>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="portrait_button function_button" onclick="click_enter()">
+              <p class="button portrait_button">ENTER</p>
+            </td>
+            <td class="portrait_button function_button" onclick="click_eex()">
+              <p class="button portrait_button">EEX</p>
+            </td>
+            <td class="portrait_button function_button" onclick="click_sign()">
+              <p class="button portrait_button">CHS</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="portrait_button digit_button" onclick="click_7()">
+              <p class="button portrait_button">7</p>
+            </td>
+            <td class="portrait_button digit_button" onclick="click_8()">
+              <p class="button portrait_button">8</p>
+            </td>
+            <td class="portrait_button digit_button" onclick="click_9()">
+              <p class="button portrait_button">9</p>
+            </td>
+            <td class="portrait_button function_button" onclick="click_divide()">
+              <p class="button portrait_button">&#x00F7</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="portrait_button digit_button" onclick="click_4()">
+              <p class="button portrait_button">4</p>
+            </td>
+            <td class="portrait_button digit_button" onclick="click_5()">
+              <p class="button portrait_button">5</p>
+            </td>
+            <td class="portrait_button digit_button" onclick="click_6()">
+              <p class="button portrait_button">6</p>
+            </td>
+            <td class="portrait_button function_button" onclick="click_multiply()">
+              <p class="button portrait_button">&#x00D7</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="portrait_button digit_button" onclick="click_1()">
+              <p class="button portrait_button">1</p>
+            </td>
+            <td class="portrait_button digit_button" onclick="click_2()">
+              <p class="button portrait_button">2</p>
+            </td>
+            <td class="portrait_button digit_button" onclick="click_3()">
+              <p class="button portrait_button">3</p>
+            </td>
+            <td class="portrait_button function_button" onclick="click_subtract()">
+              <p class="button portrait_button">&#x2212</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="portrait_button digit_button" onclick="click_0()">
+              <p class="button portrait_button">0</p>
+            </td>
+            <td class="portrait_button digit_button" onclick="click_decimal()">
+              <p class="button portrait_button">.</p>
+            </td>
+            <td class="portrait_button digit_button" onclick="click_clear()">
+              <p class="button portrait_button">&#x2190</p>
+            </td>
+            <td class="portrait_button function_button" onclick="click_add()">
+              <p class="button portrait_button">+</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="landscape">
+      <table cellspacing="0" cellpadding="0" class="t1">
+        <tbody>
+          <tr>
+            <td colspan="7" class="display" onclick="click_display()">
+              <p id="landscape_display" class="display landscape_display"></p>
+            </td>
+          </tr>
+          <tr>
+            <td class="landscape_button function_button" onclick="click_power()">
+              <p id="landscape_power" class="button landscape_button"><i>y<sup>x</sup></i></p>
+              <p id="landscape_tan" class="button landscape_button" style="display: none">tan</p>
+            </td>
+            <td class="landscape_button function_button" onclick="click_inverse()">
+              <p id="landscape_inverse" class="button landscape_button">1/<i>x</i></p>
+              <p id="landscape_arctan" class="button landscape_button" style="display: none">tan<sup>-1</sup></p>
+            </td>
+            <td class="landscape_button function_button" onclick="click_sign()">
+              <p class="button landscape_button">CHS</p>
+            </td>
+            <td class="landscape_button digit_button" onclick="click_7()">
+              <p class="button landscape_button">7</p>
+            </td>
+            <td class="landscape_button digit_button" onclick="click_8()">
+              <p class="button landscape_button">8</p>
+            </td>
+            <td class="landscape_button digit_button" onclick="click_9()">
+              <p class="button landscape_button">9</p>
+            </td>
+            <td class="landscape_button function_button" onclick="click_divide()">
+              <p class="button landscape_button">&#x00F7</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="landscape_button function_button" onclick="click_ex()">
+              <p id="landscape_ex" class="button landscape_button"><i>e<sup>x</sup></i></p>
+              <p id="landscape_cos" class="button landscape_button" style="display: none">cos</p>
+            </td>
+            <td class="landscape_button function_button" onclick="click_ln()">
+              <p id="landscape_ln" class="button landscape_button">ln</p>
+              <p id="landscape_arccos" class="button landscape_button" style="display: none">cos<sup>-1</sup></p>
+            </td>
+            <td class="landscape_button function_button" onclick="click_eex()">
+              <p class="button landscape_button">EEX</p>
+            </td>
+            <td class="landscape_button digit_button" onclick="click_4()">
+              <p class="button landscape_button">4</p>
+            </td>
+            <td class="landscape_button digit_button" onclick="click_5()">
+              <p class="button landscape_button">5</p>
+            </td>
+            <td class="landscape_button digit_button" onclick="click_6()">
+              <p class="button landscape_button">6</p>
+            </td>
+            <td class="function_button" onclick="click_multiply()">
+              <p class="button landscape_button">&#x00D7</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="landscape_button function_button" onclick="click_pi()">
+              <p id="landscape_pi" class="button landscape_button">pi</p>
+              <p id="landscape_sin" class="button landscape_button" style="display: none">sin</p>
+            </td>
+            <td class="landscape_button function_button" onclick="click_factorial()">
+              <p id="landscape_factorial" class="button landscape_button"><i>x</i>!</p>
+              <p id="landscape_arcsin" class="button landscape_button" style="display: none">sin<sup>-1</sup></p>
+            </td>
+            <td rowspan="2" class="landscape_button function_button" onclick="click_enter()">
+              <p class="button landscape_button">E<br>N<br>T</p>
+            </td>
+            <td class="landscape_button digit_button" onclick="click_1()">
+              <p class="button landscape_button">1</p>
+            </td>
+            <td class="landscape_button digit_button" onclick="click_2()">
+              <p class="button landscape_button">2</p>
+            </td>
+            <td class="landscape_button digit_button" onclick="click_3()">
+              <p class="button landscape_button">3</p>
+            </td>
+            <td class="landscape_button function_button" onclick="click_subtract()">
+              <p class="button landscape_button">&#x2212</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="landscape_button f_button" onclick="click_f()">
+              <p class="f_button landscape_f_button">f</p>
+            </td>
+            <td class="landscape_button function_button" onclick="click_swap()">
+              <p class="button landscape_button"><i>x</i><><i>y</i></p>
+            </td>
+            <td class="landscape_button digit_button" onclick="click_0()">
+              <p class="button landscape_button">0</p>
+            </td>
+            <td class="landscape_button digit_button" onclick="click_decimal()">
+              <p class="button landscape_button">.</p>
+            </td>
+            <td class="landscape_button digit_button" onclick="click_clear()">
+              <p class="button landscape_button">&#x2190</p>
+            </td>
+            <td class="landscape_button function_button" onclick="click_add()">
+              <p class="button landscape_button">+</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <script>
+      const Formats = {
+        NORMAL:      0,
+        FIX2:        1,
+        ENG3:        2,
+        MAX_FORMATS: 3
+      }
+
+      var stack = {
+        x: 0,
+        y: 0,
+        z: 0,
+        t: 0,
+
+        push: function(val) {
+          this.t = this.z;
+          this.z = this.y;
+          this.y = this.x;
+          this.x = val;
+        },
+
+        pop: function() {
+          var val = this.x;
+          this.x = this.y;
+          this.y = this.z;
+          this.z = this.t;
+          return parseFloat(val);
+        },
+
+        peek: function() {
+          return parseFloat(this.x);
+        }
+      }
+
+      var display_mode = true;
+      var overwrite = false;
+      var decimal = false;
+      var exponent = false;
+      var alt_function = false;
+      var display_string = "0";
+      var x = 0;
+      var y = 0;
+      var display_format = Formats.NORMAL;
+
+      function normal_format(val) {
+        var i = 8;
+        var val_prec = (stack.peek()).toPrecision(i);
+        while ((val_prec.length > 12) && (i > 0)) {
+          val_prec = (stack.peek()).toPrecision(i);
+          i--;
+        }
+        if (val_prec.length < val.length) {
+          val = val_prec;
+        }
+        return val.toString();
+      }
+
+      function show() {
+        var val_string = display_string;
+        if (display_mode) {
+          val = (stack.peek()).toString();
+          switch (display_format) {
+            case Formats.NORMAL:
+              val_string = normal_format(val);
+              break;
+            case Formats.FIX2:
+              // -999,999.99 (11 chars)
+              var rounded = Math.round(val * 100) / 100;
+              if (Math.abs(rounded) > 999999.99) {
+                val_string = normal_format(val);
+              }
+              else {
+                val_string = rounded.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+              }
+              break;
+            case Formats.ENG3:
+              // -9.999e-999 (11 chars)
+              var magnitude = Math.log10(Math.abs(val));
+              if (val == 0) {
+                magnitude = 0;
+              }
+              var eng_exponent = Math.floor(Math.floor(magnitude) / 3) * 3;
+              val_string = (val / Math.pow(10, eng_exponent)).toPrecision(4) + "e" + eng_exponent;
+              break;
+            default:
+              display_format = Formats.NORMAL;
+              val_string = normal_format(val);
+              break;
+          }
+        }
+        document.getElementById("portrait_display").innerHTML = val_string;
+        document.getElementById("landscape_display").innerHTML = val_string;
+        console.log(stack.x, stack.y, stack.z, stack.t);
+      }
+      
+      function clear() {
+        display_mode = false;
+        overwrite = false;
+        decimal = false;
+        exponent = false;
+        display_string = "0";
+      }
+
+      function click_display() {
+        display_format++;
+        if (display_format >= Formats.MAX_FORMATS) {
+          display_format = 0;
+        }
+        show();
+      }
+      
+      function click_enter() {
+        if (!display_mode) {
+          stack.push(parseFloat(display_string));
+        }
+        stack.push(stack.peek());
+        display_mode = true;
+        overwrite = true;
+        show();
+      }
+      
+      function get_x() {
+        if (!display_mode) {
+          stack.push(parseFloat(display_string));
+        }
+        x = stack.pop();
+        display_mode = true;
+        overwrite = false;
+      }
+      
+      function get_x_y() {
+        get_x();
+        y = stack.pop();
+      }
+      
+      function click_0() {
+        click_num("0");
+      }
+      
+      function click_1() {
+        click_num("1");
+      }
+      
+      function click_2() {
+        click_num("2");
+      }
+      
+      function click_3() {
+        click_num("3");
+      }
+      
+      function click_4() {
+        click_num("4");
+      }
+      
+      function click_5() {
+        click_num("5");
+      }
+      
+      function click_6() {
+        click_num("6");
+      }
+      
+      function click_7() {
+        click_num("7");
+      }
+      
+      function click_8() {
+        click_num("8");
+      }
+      
+      function click_9() {
+        click_num("9");
+      }
+      
+      function click_clear() {
+        clear();
+        show();
+      }
+      
+      function click_num(val) {
+        if (display_mode) {
+          if (overwrite) {
+            stack.pop();
+          }
+          clear();
+          display_string = val;
+        }
+        else {
+          if (display_string != "0") {
+            display_string = display_string + val;
+          }
+          else {
+            display_string = val;
+          }
+        }
+        show();
+      }
+      
+      function click_decimal() {
+        if (display_mode) {
+          if (overwrite) {
+            stack.pop();
+          }
+          clear();
+        }
+        if (!decimal) {
+          display_string = display_string + ".";
+          decimal = true;
+          show();
+        }
+      }
+      
+      function click_sign() {
+        if (display_mode) {
+          get_x();
+          stack.push(0 - x);
+          overwrite = false;
+        }
+        else {
+          if (exponent) {
+            if (-1 != display_string.search("e\\+")) {
+              display_string = display_string.replace("e+", "e-");
+            }
+            else if (-1 != display_string.search("e-")) {
+              display_string = display_string.replace("e-", "e+");
+            }
+            else {
+              display_string = display_string.replace("e", "e-");
+            }
+          }
+          else {
+            display_string = (0 - parseFloat(display_string)).toString();
+          }
+        }
+        show();
+      }
+      
+      function click_eex() {
+        if (display_mode) {
+          if (overwrite) {
+            stack.pop();
+          }
+          clear();
+          display_string = "1";
+        }
+        if (!exponent) {
+          display_string = display_string + "e";
+          exponent = true;
+          show();
+        }
+      }
+      
+      function click_f() {
+        if (alt_function) {
+          document.getElementById("portrait_sin").style.display = "none";
+          document.getElementById("portrait_cos").style.display = "none";
+          document.getElementById("portrait_tan").style.display = "none";
+          document.getElementById("portrait_arcsin").style.display = "none";
+          document.getElementById("portrait_arccos").style.display = "none";
+          document.getElementById("portrait_arctan").style.display = "none";
+
+          document.getElementById("landscape_sin").style.display = "none";
+          document.getElementById("landscape_cos").style.display = "none";
+          document.getElementById("landscape_tan").style.display = "none";
+          document.getElementById("landscape_arcsin").style.display = "none";
+          document.getElementById("landscape_arccos").style.display = "none";
+          document.getElementById("landscape_arctan").style.display = "none";
+
+          document.getElementById("portrait_power").style.display = "block";
+          document.getElementById("portrait_inverse").style.display = "block";
+          document.getElementById("portrait_ex").style.display = "block";
+          document.getElementById("portrait_ln").style.display = "block";
+          document.getElementById("portrait_pi").style.display = "block";
+          document.getElementById("portrait_factorial").style.display = "block";
+
+          document.getElementById("landscape_power").style.display = "block";
+          document.getElementById("landscape_inverse").style.display = "block";
+          document.getElementById("landscape_ex").style.display = "block";
+          document.getElementById("landscape_ln").style.display = "block";
+          document.getElementById("landscape_pi").style.display = "block";
+          document.getElementById("landscape_factorial").style.display = "block";
+
+          alt_function = false;
+        }
+        else {
+          document.getElementById("portrait_power").style.display = "none";
+          document.getElementById("portrait_inverse").style.display = "none";
+          document.getElementById("portrait_ex").style.display = "none";
+          document.getElementById("portrait_ln").style.display = "none";
+          document.getElementById("portrait_pi").style.display = "none";
+          document.getElementById("portrait_factorial").style.display = "none";
+
+          document.getElementById("landscape_power").style.display = "none";
+          document.getElementById("landscape_inverse").style.display = "none";
+          document.getElementById("landscape_ex").style.display = "none";
+          document.getElementById("landscape_ln").style.display = "none";
+          document.getElementById("landscape_pi").style.display = "none";
+          document.getElementById("landscape_factorial").style.display = "none";
+
+          document.getElementById("portrait_sin").style.display = "block";
+          document.getElementById("portrait_cos").style.display = "block";
+          document.getElementById("portrait_tan").style.display = "block";
+          document.getElementById("portrait_arcsin").style.display = "block";
+          document.getElementById("portrait_arccos").style.display = "block";
+          document.getElementById("portrait_arctan").style.display = "block";
+
+          document.getElementById("landscape_sin").style.display = "block";
+          document.getElementById("landscape_cos").style.display = "block";
+          document.getElementById("landscape_tan").style.display = "block";
+          document.getElementById("landscape_arcsin").style.display = "block";
+          document.getElementById("landscape_arccos").style.display = "block";
+          document.getElementById("landscape_arctan").style.display = "block";
+
+          alt_function = true;
+        }
+        show();
+      }
+      
+      function click_add() {
+        get_x_y();
+        stack.push(y + x);
+        show();
+      }
+      
+      function click_subtract() {
+        get_x_y();
+        stack.push(y - x);
+        show();
+      }
+      
+      function click_multiply() {
+        get_x_y();
+        stack.push(y * x);
+        show();
+      }
+      
+      function click_divide() {
+        get_x_y();
+        stack.push(y / x);
+        show();
+      }
+      
+      function click_power() {
+        if (alt_function) {
+          click_tan();
+        }
+        else {
+          get_x_y();
+          stack.push(Math.pow(y, x));
+          show();
+        }
+      }
+
+      function click_pi() {
+        if (alt_function) {
+          click_sin();
+        }
+        else {
+          stack.push(Math.PI);
+          show();
+        }
+      }
+      
+      function click_sin() {
+        get_x();
+        stack.push(Math.sin(x * Math.PI / 180));
+        show();
+      }
+
+      function click_arcsin() {
+        get_x();
+        stack.push(Math.asin(x) * 180 / Math.PI);
+        show();
+      }
+      
+      function click_cos() {
+        get_x();
+        stack.push(Math.cos(x * Math.PI / 180));
+        show();
+      }
+      
+      function click_arccos() {
+        get_x();
+        stack.push(Math.acos(x) * 180 / Math.PI);
+        show();
+      }
+      
+      function click_tan() {
+        get_x();
+        stack.push(Math.tan(x * Math.PI / 180));
+        show();
+      }
+      
+      function click_arctan() {
+        get_x();
+        stack.push(Math.atan(x) * 180 / Math.PI);
+        show();
+      }
+      
+      function click_ex() {
+        if (alt_function) {
+          click_cos();
+        }
+        else {
+          get_x();
+          stack.push(Math.pow(Math.E, x));
+          show();
+        }
+      }
+      
+      function click_ln() {
+        if (alt_function) {
+          click_arccos();
+        }
+        else {
+          get_x();
+          stack.push(Math.log(x));
+          show();
+        }
+      }
+      
+      function click_swap() {
+        get_x_y();
+        stack.push(x);
+        stack.push(y);
+        show();
+      }
+      
+      function click_inverse() {
+        if (alt_function) {
+          click_arctan();
+        }
+        else {
+          get_x();
+          stack.push(1 / x);
+          show();
+        }
+      }
+      
+      function click_factorial() {
+        if (alt_function) {
+          click_arcsin();
+        }
+        else {
+          get_x();
+          var fact=1;
+          for (var i = 2; i <= x; i++) {
+            fact = fact * i;
+            }
+          stack.push(fact);
+          show();
+        }
+      }
+
+      document.addEventListener('keydown', function (event) {
+          if (event.defaultPrevented) {
+              return;
+          }
+
+          var key = event.key || event.keyCode;
+
+          if (key === '0' || key === 'Numpad0' || key === 96) {
+              click_num("0");
+          }
+          else if (key === '1' || key === 'Numpad1' || key === 97) {
+              click_num("1");
+          }
+          else if (key === '2' || key === 'Numpad2' || key === 98) {
+              click_num("2");
+          }
+          else if (key === '3' || key === 'Numpad3' || key === 99) {
+              click_num("3");
+          }
+          else if (key === '4' || key === 'Numpad4' || key === 100) {
+              click_num("4");
+          }
+          else if (key === '5' || key === 'Numpad5' || key === 101) {
+              click_num("5");
+          }
+          else if (key === '6' || key === 'Numpad6' || key === 102) {
+              click_num("6");
+          }
+          else if (key === '7' || key === 'Numpad7' || key === 103) {
+              click_num("7");
+          }
+          else if (key === '8' || key === 'Numpad8' || key === 104) {
+              click_num("8");
+          }
+          else if (key === '9' || key === 'Numpad9' || key === 105) {
+              click_num("9");
+          }
+          else if (key === '.' || key === 'NumpadDecimal' || key === 110) {
+              click_decimal();
+          }
+          else if (key === '+' || key === 'NumpadAdd' || key === 107) {
+              click_add();
+          }
+          else if (key === '-' || key === 'NumpadSubtract' || key === 109) {
+              click_subtract();
+          }
+          else if (key === '*' || key === 'NumpadMultiply' || key === 106) {
+              click_multiply();
+          }
+          else if (key === '/' || key === 'NumpadDivide' || key === 111) {
+              click_divide();
+          }
+          else if (key === 'Enter' || key === 'NumpadEnter' || key === 13) {
+              click_enter();
+          }
+          else if (key === 'Backspace' || key === 'Backspace' || key === 8) {
+              click_clear();
+          }
+          else if (key === 'e' || key === 'KeyE' || key === 69) {
+              click_eex();
+          }
+          else if (key === 's' || key === 'KeyS' || key === 83) {
+              click_sign();
+          }
+          else {
+            // Do nothing
+          }
+      });
+      
+      show();
+    </script>
+  </body>
+</html>

@@ -762,9 +762,9 @@
           else {
             fact = NaN;
           }
+          stack.push(fact);
+          show();
         }
-        stack.push(fact);
-        show();
       }
 
       document.addEventListener('keydown', function (event) {

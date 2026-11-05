@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, height-device-height, initial-scale=1, user-scalable=0">
-    
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=0">
+    
     <title>
       RPN Calculator
     </title>
@@ -11,7 +11,7 @@
     <style type="text/css">
       html, body {
         background-color: #000000; 
-        overflow: none
+        overflow: hidden;
         }
       table.t1 {
         width: 100%; 
@@ -29,7 +29,7 @@
         border-width: 1px; 
         border-color: #000000; 
         padding: 3px;
-        vertical-align: center;
+        vertical-align: middle;
         }
       td.display {
         width: 100%; 
@@ -143,7 +143,7 @@
               <p class="button portrait_button">9</p>
             </td>
             <td class="portrait_button function_button" onclick="click_divide()">
-              <p class="button portrait_button">&#x00F7</p>
+              <p class="button portrait_button">&#x00F7;</p>
             </td>
           </tr>
           <tr>
@@ -157,7 +157,7 @@
               <p class="button portrait_button">6</p>
             </td>
             <td class="portrait_button function_button" onclick="click_multiply()">
-              <p class="button portrait_button">&#x00D7</p>
+              <p class="button portrait_button">&#x00D7;</p>
             </td>
           </tr>
           <tr>
@@ -171,7 +171,7 @@
               <p class="button portrait_button">3</p>
             </td>
             <td class="portrait_button function_button" onclick="click_subtract()">
-              <p class="button portrait_button">&#x2212</p>
+              <p class="button portrait_button">&#x2212;</p>
             </td>
           </tr>
           <tr>
@@ -182,7 +182,7 @@
               <p class="button portrait_button">.</p>
             </td>
             <td class="portrait_button digit_button" onclick="click_clear()">
-              <p class="button portrait_button">&#x2190</p>
+              <p class="button portrait_button">&#x2190;</p>
             </td>
             <td class="portrait_button function_button" onclick="click_add()">
               <p class="button portrait_button">+</p>
@@ -222,7 +222,7 @@
               <p class="button landscape_button">9</p>
             </td>
             <td class="landscape_button function_button" onclick="click_divide()">
-              <p class="button landscape_button">&#x00F7</p>
+              <p class="button landscape_button">&#x00F7;</p>
             </td>
           </tr>
           <tr>
@@ -246,8 +246,8 @@
             <td class="landscape_button digit_button" onclick="click_6()">
               <p class="button landscape_button">6</p>
             </td>
-            <td class="function_button" onclick="click_multiply()">
-              <p class="button landscape_button">&#x00D7</p>
+            <td class="landscape_button function_button" onclick="click_multiply()">
+              <p class="button landscape_button">&#x00D7;</p>
             </td>
           </tr>
           <tr>
@@ -272,7 +272,7 @@
               <p class="button landscape_button">3</p>
             </td>
             <td class="landscape_button function_button" onclick="click_subtract()">
-              <p class="button landscape_button">&#x2212</p>
+              <p class="button landscape_button">&#x2212;</p>
             </td>
           </tr>
           <tr>
@@ -280,7 +280,7 @@
               <p class="f_button landscape_f_button">f</p>
             </td>
             <td class="landscape_button function_button" onclick="click_swap()">
-              <p class="button landscape_button"><i>x</i><><i>y</i></p>
+              <p class="button landscape_button"><i>x</i>&lt;&gt;<i>y</i></p>
             </td>
             <td class="landscape_button digit_button" onclick="click_0()">
               <p class="button landscape_button">0</p>
@@ -289,7 +289,7 @@
               <p class="button landscape_button">.</p>
             </td>
             <td class="landscape_button digit_button" onclick="click_clear()">
-              <p class="button landscape_button">&#x2190</p>
+              <p class="button landscape_button">&#x2190;</p>
             </td>
             <td class="landscape_button function_button" onclick="click_add()">
               <p class="button landscape_button">+</p>
@@ -375,13 +375,18 @@
               }
               break;
             case Formats.ENG3:
-              // -9.999e-999 (11 chars)
-              var magnitude = Math.log10(Math.abs(val));
-              if (val == 0) {
-                magnitude = 0;
+              if (Number.isFinite(Number(val))) {
+                // -9.999e-999 (11 chars)
+                var magnitude = Math.log10(Math.abs(val));
+                if (val == 0) {
+                  magnitude = 0;
+                }
+                var eng_exponent = Math.floor(Math.floor(magnitude) / 3) * 3;
+                val_string = (val / Math.pow(10, eng_exponent)).toPrecision(4) + "e" + eng_exponent;
               }
-              var eng_exponent = Math.floor(Math.floor(magnitude) / 3) * 3;
-              val_string = (val / Math.pow(10, eng_exponent)).toPrecision(4) + "e" + eng_exponent;
+              else {
+                val_string = normal_format(val);
+              }
               break;
             default:
               display_format = Formats.NORMAL;
@@ -505,7 +510,7 @@
           }
           clear();
         }
-        if (!decimal) {
+        if (!(decimal || exponent)) {
           display_string = display_string + ".";
           decimal = true;
           show();
@@ -748,7 +753,10 @@
           var fact=1;
           for (var i = 2; i <= x; i++) {
             fact = fact * i;
+            if (!Number.isFinite(fact)) {
+              break;
             }
+          }
           stack.push(fact);
           show();
         }

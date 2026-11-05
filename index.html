@@ -333,7 +333,6 @@
         }
       }
 
-      var val = 0;
       var display_mode = true;
       var overwrite = false;
       var decimal = false;
@@ -360,7 +359,7 @@
       function show() {
         var val_string = display_string;
         if (display_mode) {
-          val = (stack.peek()).toString();
+          var val = (stack.peek()).toString();
           switch (display_format) {
             case Formats.NORMAL:
               val_string = normal_format(val);
@@ -751,11 +750,16 @@
         }
         else {
           get_x();
-          var fact=1;
-          for (var i = 2; i <= x; i++) {
-            fact = fact * i;
-            if (!Number.isFinite(fact)) {
-              break;
+          if ((x > 0) && Number.isInteger(Number(x))) {
+            var fact=1;
+            for (var i = 2; i <= x; i++) {
+              fact = fact * i;
+              if (!Number.isFinite(fact)) {
+                break;
+              }
+            }
+            else {
+              fact = Nan;
             }
           }
           stack.push(fact);

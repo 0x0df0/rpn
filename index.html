@@ -758,13 +758,13 @@
                 break;
               }
             }
-            else {
-              fact = Nan;
-            }
           }
-          stack.push(fact);
-          show();
+          else {
+            fact = Nan;
+          }
         }
+        stack.push(fact);
+        show();
       }
 
       document.addEventListener('keydown', function (event) {
